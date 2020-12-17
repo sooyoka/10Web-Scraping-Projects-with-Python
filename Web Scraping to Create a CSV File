@@ -1,0 +1,18 @@
+LIBRARIES
+from bs4 import BeautifulSoup
+import requests
+import csv
+# Request the data 
+source = requests.get('https://www.flipkart.com/search?q=samsung+mobiles&amp;sid=tyy%2C4io&amp;as=on&amp;as-show=on&amp;otracker=AS_QueryStore_HistoryAutoSuggest_0_2&amp;otracker1=AS_QueryStore_HistoryAutoSuggest_0_2&amp;as-pos=0&amp;as-type=HISTORY&amp;as-searchtext=sa').text
+# Create soup 
+soup = BeautifulSoup(source,'html.parser')
+# saving products nae and description
+product_name = soup.find_all('div',class_='_4rR01T')
+description = soup.find_all('li',class_='rgWa7D')
+## Create csv
+file_csv = open('product.csv','w')
+csv_writer =csv.writer(file_csv)
+csv_writer.writerow(['product_name','description'])
+for i in range(len(product_name)):
+    csv_writer.writerow([product_name[i].text,description[i].text])
+file_csv.close()   
